@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+        <!-- 例1 函数式组件 -->
+        <div id="app1"></div>
+        <script type="text/babel">
+            // 组件1  函数式组件
+            function Login(props) {
+                // { 变量 } 输出变量值
+                return (
+                    <div>
+                        { props.loginName }: <input />
+                        { props.password }: <input />
+                        <button>登录</button>    
+                    </div>
+                );
+            }
+
+            ReactDOM.render(
+                <div>
+                    hello
+                    <Login loginName="登陆的名称" password="口令"/>
+                </div>, 
+                document.getElementById('app1'));
+        </script>
+
+        <!-- 例1 类组件 -->
+        <div id="app2"></div>
+        <script type="text/babel">
+
+            class Login2 extends React.Component {
+
+                // 渲染函数
+                render() {
+                    // return 返回 jsx
+                    return (
+                        <div>
+                            { this.props.loginName }: <input />
+                            { this.props.password }: <input/>
+                            <button>登录</button>    
+                        </div>
+                    );
+                }
+            }
+
+            ReactDOM.render(
+                <div>
+                    hello
+                    <Login2 loginName="登陆的名称" password="口令"/>
+                </div>, 
+                document.getElementById('app2'));
+        </script>
+
+        <!-- 例3 类组件 -->
+        <div id="app3"></div>
+        <script type="text/babel">
+
+            class Counter extends React.Component {
+
+                constructor(props) {
+                    // 调用父类的构造函数
+                    super(props);
+                    // 将 当前实例 中的 方法 inc 强制 和 this 关联
+                    this.inc1 = this.inc1.bind(this);
+
+                    // 定义数据模型
+                    this.state = {
+                        count: 0
+                    }
+                }
+
+                inc1() {
+                    console.log(this);
+                    console.log('被点击了', this.state.count)
+                    // 不能这样直接修改, 否则 react 渲染机制无法识别
+                    // this.state.count = this.state.count + 1; 
+
+                    // 修改 通过 setState方法 修改count 属性, 他会触发, rerender 重新渲染
+                    this.setState({
+                        count: this.state.count + 1
+                    })
+                }
+
+                render() {
+                    return (
+                        <div>
+                            { this.state.count }
+                            <hr/>
+                            <button onClick={this.inc1}>增加</button>
+                        </div>
+                    );
+                }
+            }
+
+            ReactDOM.render(
+                <div>
+                    hello
+                    <Counter />
+                </div>, 
+                document.getElementById('app3'));
+        </script>
+</body>
+</html>

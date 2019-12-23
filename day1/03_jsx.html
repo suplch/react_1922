@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+        <!-- 例1 jsx -->
+        <div id="app1"></div>
+        <script type="text/babel">
+            let el = (
+                <ul>
+                    <li>Java</li>
+                    <li>Node</li>
+                </ul>
+            );
+            ReactDOM.render(el, document.getElementById('app1'));
+        </script>
+
+        <!-- 例1 jsx -->
+        <div id="app2"></div>
+        <script>
+            // React.createElement 其实是在创建 虚拟DOM
+            // JSX 语法会被翻译为 React.createElement
+            /*
+                {
+                    tag: 'ul',
+                    attrs: {},
+                    children: [
+                        {
+                            tag: 'li',
+                            attrs: {},
+                            children: 'Java'
+                        },
+                        {
+                            tag: 'li',
+                            attrs: {},
+                            children: 'Node'
+                        }
+                    ]
+                }
+            
+            */
+           // 
+            let ul = (
+                React.createElement('ul', {}, [
+                    React.createElement('li', {}, 'Java'),
+                    React.createElement('li', {}, 'Node'),
+                ])
+            );
+            ReactDOM.render(ul, document.getElementById('app2'));
+        </script>
+</body>
+</html>

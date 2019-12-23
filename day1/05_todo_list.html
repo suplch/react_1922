@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .taskDone {
+            color: lightgrey;
+        }
+    </style>
+</head>
+<body>
+
+        <div id="app1"></div>
+        <script type="text/babel">
+            
+            class TodoList extends React.Component {
+                constructor(props) {
+                    super(props);
+
+                    // 定义数据模型
+                    this.state = {
+                        todos: [
+                            {task: '刷牙', done: true},
+                            {task: '洗脸', done: false},
+                            {task: '上课', done: false},
+                        ]
+                    }
+                }
+
+                changeTaskDone(todo) {
+                    // 将数据模型进行修改, 但是 不会触发界面的重新渲染
+                    todo.done = !todo.done;
+                    console.log(todo);
+                    // 我们必须主动 调用 setState 方法镜像 重新渲染
+                    this.setState({
+                        todos: this.state.todos
+                    });
+
+                }
+
+                // 渲染函数
+                render() {
+                    alert('开始渲染')
+                    const lis = [];
+                    let doneCount = 0;
+                    // 循环遍历数组
+                    for (let todo of this.state.todos) {
+                        if (todo.done) {
+                            doneCount++;
+                        }
+                        lis.push(
+                            <li key={todo.task} className={  todo.done ? 'taskDone' : ''   }>
+                                { todo.task }
+                                <input type="checkbox" onChange={ () => { this.changeTaskDone(todo) } } checked={ todo.done } />
+                            </li>
+                        );
+                    }
+
+                    return (
+                        <div>
+                            <ul>
+                                { lis }
+                            </ul>
+                            一共有 { lis.length } 条任务
+                            完成了 { doneCount } 条任务
+                            未完成 { lis.length - doneCount }
+                        </div>
+                        
+                    );
+                }
+            }
+
+            ReactDOM.render(<TodoList/>, document.getElementById('app1'));
+
+        </script>
+
+</body>
+</html>
