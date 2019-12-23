@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+        <!-- 例1 -->
+        <div id="app1"></div>
+        <!-- script 标签需要写一个 type 属性, 值为 text/babel 用来翻译jsx 为 正常的js -->
+        <script type="text/babel">
+            // react 里面可以再 js 代码里面直接嵌入 类似于 html的标签
+            // 我们管这种语法叫  JSX
+            // 
+            ReactDOM.render(<div>Hello World!!!</div>, document.getElementById('app1'));
+        </script>
+
+        <!-- 例2 -->
+        <div id="app2"></div>
+        <script type="text/babel">
+            let dv = <div>Hello World!!!</div>;
+            ReactDOM.render(dv, document.getElementById('app2'));
+        </script>
+
+        <!-- 例3 -->
+        <div id="app3"></div>
+        <script type="text/babel">
+            function Hello() {
+                // jsx 语法
+                return <div>Hello World!!!</div>
+            }
+            let dv = Hello();
+
+            ReactDOM.render(dv, document.getElementById('app3'));
+        </script>
+
+        <!-- 例4 -->
+        <div id="app4"></div>
+        <script type="text/babel">
+            function Hello() {
+                // jsx 语法
+                return <div>Hello World!!!</div>
+            }
+            // 在 react里面 如果一个函数 返回 jsx 语法, 那么这个函数就是一个自定义组件
+            let dv = <Hello/>
+
+            ReactDOM.render(dv, document.getElementById('app4'));
+        </script>
+
+        <!-- 例5 -->
+        <div id="app5"></div>
+        <script type="text/babel">
+            function Hello(props) {
+                // jsx 语法
+                return <div>Hello World!!!, 欢迎 { props.name } 光临 年龄 { props.age }</div>
+            }
+            // 在 react里面 如果一个函数 返回 jsx 语法, 那么这个函数就是一个自定义组件
+            let dv = Hello({name: '张三', age: 18})
+
+            ReactDOM.render(dv, document.getElementById('app5'));
+        </script>
+
+        <!-- 例6 -->
+        <div id="app6"></div>
+        <script type="text/babel">
+            function Hello(props) {
+                // jsx 语法
+                return <div>Hello World!!!, 欢迎 { props.name } 光临, 年龄 { props.age }</div>
+            }
+            // 在 react里面 如果一个函数 返回 jsx 语法, 那么这个函数就是一个自定义组件
+            let dv = <Hello name="李四" age="18" />
+
+            ReactDOM.render(dv, document.getElementById('app6'));
+        </script>
+</body>
+</html>

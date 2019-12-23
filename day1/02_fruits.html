@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+        <!-- 例1 -->
+        <div id="app1"></div>
+        <script type="text/babel">
+            
+            let fruits = <ul>
+                <li>西瓜🍉</li>
+                <li>葡萄🍇</li>
+                <li>菠萝🍍</li> 
+            </ul>
+
+            ReactDOM.render(fruits, document.getElementById('app1'));
+        </script>
+
+        <!-- 例2 -->
+        <div id="app2"></div>
+        <script type="text/babel">
+            
+            let fruits = [
+                {name: '西瓜', pic: '🍉'},
+                {name: '葡萄', pic: '🍇'},
+                {name: '菠萝', pic: '🍍'},
+            ];
+
+            // for (let fruit of fruits) {
+            //     <li>{ fruit.name }, { fruit.pic }</li>
+            // }
+
+            let li1 = <li>{ fruits[0].name }, { fruits[0].pic }</li>
+            let li2 = <li>{ fruits[1].name }, { fruits[1].pic }</li>
+            let li3 = <li>{ fruits[2].name }, { fruits[2].pic }</li>
+
+            let ul = <ul>
+                { li1 }
+                { li2 }
+                { li3 }
+            </ul>
+
+            ReactDOM.render(ul, document.getElementById('app2'));
+        </script>
+
+        <!-- 例3 -->
+        <div id="app3"></div>
+        <script type="text/babel">
+            
+            let fruits = [
+                {name: '西瓜', pic: '🍉'},
+                {name: '葡萄', pic: '🍇'},
+                {name: '菠萝', pic: '🍍'},
+            ];
+
+            let lis = [];
+            for (let fruit of fruits) {
+                lis.push(<li>{ fruit.name }, { fruit.pic }</li>);
+            }
+
+            let ul = <ul>
+                { lis }
+            </ul>
+
+            ReactDOM.render(ul, document.getElementById('app3'));
+        </script>
+</body>
+</html>
