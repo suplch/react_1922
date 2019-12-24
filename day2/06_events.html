@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .boy {
+            border: solid 5px red;
+            width: 300px;
+            height: 300px;
+        }
+
+        .girl {
+            border: solid 5px green;
+            width: 300px;
+            height: 300px;
+        }
+
+        .msg {
+            height: 30px;
+        }
+
+        .me {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+
+    class Events {
+        constructor() {
+            this.callbackContainer = {};
+            // this.callbackContainer = {
+            //     '我饿了': [
+            //         function() {},
+            //         function() {},
+            //     ],
+            //     '我渴了': [
+            //         function() {},
+            //         function() {},
+            //     ]
+            // };
+        }
+        on(eventName, callback) {
+
+            if (!this.callbackContainer[eventName]) {
+                // 第一次 eventName 所对应的 回调函数 数组不存在, 那么 造一个
+                this.callbackContainer[eventName] = [];
+            }
+
+            this.callbackContainer[eventName].push(callback)
+        }
+
+        emit(eventName, data) {
+            const callback_list = this.callbackContainer[eventName];
+            if (callback_list) {
+                for (let callback of callback_list) {
+                    callback(data);
+                }
+            }
+        }
+    }
+
+
+    // const events = new Events();
+
+    // events.on('我饿了', function (food) {
+    //     console.log('吃点 ' + food);
+    // });
+
+    // events.emit('我饿了', '🍗')
+
+
+</script>
+
+
+<script type="text/babel">
+
+    const events = new Events();
+
+    class Boy extends React.Component {
+        constructor(props) {
+            super(props);
+            this.boyRef = React.createRef();
+            // this.state = {
+            //     msg_list: [
+            //         {text: '在吗?', sender: '我'},
+            //         {text: '困了.', sender: '韩梅梅'}
+            //     ]
+            // }
+            this.state = {
+                msg_list: []
+            }
+
+            events.on('女孩说', (msg) => {
+                const { msg_list } = this.state;
+                msg_list.push(msg);
+                this.setState({
+                    msg_list
+                })
+            });
+        }
+
+        say = () => {
+            const text = this.boyRef.current.value;
+            events.emit('男孩说', {text, sender: this.props.name});
+
+            const {msg_list} = this.state;
+            msg_list.push({text, sender: '我'})
+
+            this.setState({
+                msg_list
+            })
+        }
+
+        render() {
+            const { msg_list } = this.state;
+
+            const div_list = msg_list.map((msg, index) => {
+                return (
+                    <div key={index} className="msg"> 
+                        <div className={ msg.sender === '我' ? 'me': '' }>
+                            { msg.sender } 说: { msg.text } 
+                        </div>
+                    </div>
+                )
+            });
+
+            return (
+                <div className="boy">
+                    男孩: <input ref={this.boyRef} /> <button onClick={ this.say }>发送</button>
+                    <hr/>
+                    <div>
+                        { div_list }
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    class Girl extends React.Component {
+        constructor(props) {
+            super(props);
+
+            this.girlRef = React.createRef();
+
+            this.state = {
+                msg_list: []
+            }
+
+            events.on('男孩说', (msg) => {
+                const {msg_list} = this.state;
+                msg_list.push(msg);
+                this.setState({
+                    msg_list
+                })
+            })
+        }
+        // 这样写可一个 保证 this 指向
+        say = () => {
+            // this.girlRef.current 代表了 input 框
+            let text = this.girlRef.current.value;
+            events.emit('女孩说', {text: text, sender: this.props.name});
+            
+            const { msg_list } = this.state;
+            msg_list.push({ text: text, sender: '我'});
+            this.setState({
+                msg_list
+            })
+        }
+
+        render() {
+            const { msg_list } = this.state;
+
+            const div_list = msg_list.map((msg, index) => {
+                return (
+                    <div key={index} className="msg"> 
+                        <div className={ msg.sender === '我' ? 'me': '' }>
+                            { msg.sender } 说: { msg.text } 
+                        </div>
+                    </div>
+                )
+            });
+
+            return (
+                <div className="girl">
+                    女孩: <input ref={this.girlRef} /> <button onClick={ this.say }>发送</button>
+                    <hr/>
+                    <div>
+                        { div_list }
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <div>
+            <Boy name="李磊"/>
+            <hr/>
+            <Girl name="韩梅梅" />
+        </div>,
+        document.getElementById('app')
+    );
+    
+    
+</script>
+</body>
+</html>
