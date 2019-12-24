@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .monitor {
+            border: solid 5px red;
+        }
+
+        .mouse {
+            border: solid 5px green;
+        }
+
+        .keyboard {
+            border: solid 5px orange;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    function createBox() {
+        
+        return function (params) {
+            return (
+                <div>
+                    Box { params.width }
+                </div>
+            );
+        }
+    }
+
+    function createComputer(brand) {
+        
+        return {
+            Monitor: function (params) {
+                return (
+                    <div className="monitor">
+                        我是一个 { params.size } 英寸 显示器 我是属于知名品牌 { brand } 
+                    </div>
+                )
+            },
+            Mouse: function (params) {
+                return (
+                    <div className="mouse">
+                        我是一个鼠标  我是属于知名品牌 { brand } 
+                    </div>
+                )
+            },
+            Keyboard: function(params) {
+                return (
+                    <div className="keyboard">
+                        我是一个键盘 包含 { params.count } 个按钮 我是属于知名品牌 { brand } 
+                    </div>
+                )
+            }
+        }
+    }
+
+    function createPhone(brand) {
+        return class extends React.Component {
+            render() {
+                return (
+                    <div>
+                        我是一个 { brand } 手机 
+                    </div>
+                )
+            }
+        }
+    }
+
+    const Box = createBox();
+
+    const c1 = createComputer('联想');
+    const c2 = createComputer('小米');
+    const c3 = createComputer('华为');
+    
+    const Phone = createPhone('苹果');
+
+
+    const page = (
+        <div>
+            <Box width={ 100 } />
+            <hr/>
+            <c1.Monitor size={ 15 } />
+            <c1.Mouse/>
+            <c1.Keyboard count={101} />
+            <hr/>
+            <c2.Monitor size={ 50 } />
+            <c2.Mouse/>
+            <c2.Keyboard count={ 86 } />
+            <hr/>
+            <c3.Monitor size={ 100 }/>
+            <c3.Mouse/>
+            <c3.Keyboard count={ 109 }/>
+            <hr/>
+            <Phone />
+        </div>
+    );
+
+    ReactDOM.render(page, document.getElementById('app'));
+    
+</script>
+</body>
+</html>

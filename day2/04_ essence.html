@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    
+
+    function Hello(params) {
+        console.log(params);
+        return <div>你好 { params.nm } 年龄 { params.age + 1 }</div>
+    }
+
+    let Nihao = Hello;
+    let Dazhaohu = Nihao;
+
+    let el = (
+        <div>
+            Hello World
+            <Hello nm={ '张三' } age={ 18 } />
+            <hr/>
+            <Nihao nm={ '李四' } age={ 28 } />
+            <hr/>
+            <Dazhaohu nm={ '王五' } age={ 10 } />
+        </div>
+    );
+
+    ReactDOM.render(el, document.getElementById('app'));
+    
+</script>
+</body>
+</html>
