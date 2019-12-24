@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .father {
+            border: solid 5px red;
+        }
+        .child {
+            border: solid 5px green;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    class Father extends React.Component {
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                money: 10000
+            }
+
+            this.hardWork = this.hardWork.bind(this);
+        }
+
+        hardWork() {
+            let newMoney = this.state.money + 100;
+            // this.setState 如果数据发生了变化, 那么会重新渲染 再次调用 render
+            this.setState({
+                money: newMoney
+            })
+        }
+        // 更加努力的工作
+        moreHardWork() {
+            let newMoney = this.state.money + 200;
+            // this.setState 如果数据发生了变化, 那么会重新渲染 再次调用 render
+            this.setState({
+                money: newMoney
+            })
+        }
+
+        render() {
+            return (
+                <div className="father">
+                    父组件 父亲有  { this.state.money } 元 
+                    <button onClick={ this.hardWork }>努力工作</button>
+                    { /*  可以给子组件传递任意的数据, 数字, 字符串, 对象, 函数, 如果你传递了函数, 相当于事件  */ }
+                    <Child 
+                        name="张三" 
+                        age="18" 
+                        pinmoney={ this.state.money / 2 } 
+                        onNoMoney={ () => { this.moreHardWork() } } />
+
+                </div>
+            );
+        }
+    }
+
+    class Child extends React.Component {
+
+        constructor(props) {
+            super(props);
+        }
+
+        noMoney() {
+            alert('没钱了');
+            // 调用父组件传过来的 参数onNoMoney,  onNoMoney 实际上是一个回调函数
+            this.props.onNoMoney();
+        }
+
+        render() {
+            const { name, age, pinmoney } = this.props;
+            return (
+                <div className="child">
+                    子组件 { name }, { age }
+                    零花钱: { pinmoney } 元
+                    <button onClick={ () => { this.noMoney() } }> 爸, 没钱了 </button>
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Father/>, document.getElementById('app'));
+
+</script>
+</body>
+</html>
