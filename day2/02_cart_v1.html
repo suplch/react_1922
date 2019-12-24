@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .products {
+            border: solid 5px red;
+        }
+
+        .cart {
+            border: solid 5px green;
+        }
+
+        .shop {
+            border: solid 5px pink;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    class Products extends React.Component {
+
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                product_list: [
+                    {id: '111', name: '橘子', price: 10, pic: '🍊'},
+                    {id: '222', name: '哈密瓜', price: 10, pic: '🍈'},
+                    {id: '333', name: '西瓜', price: 10, pic: '🍉'},
+                    {id: '444', name: '葡萄', price: 10, pic: '🍇'},
+                ]
+            }
+        }
+
+        addToCart(product) {
+            console.log('Products:  ', product);
+
+            this.props.onAddToCart(product)
+
+        }
+
+        render() {
+            const { product_list } = this.state;
+
+            const lis = [];
+            for (let product of product_list) {
+                lis.push(
+                    <li key={product.id}>
+                     { product.name} , 价格: { product.price}, { product.pic } 
+                     <button onClick={ () => { this.addToCart(product) } }>添加到购物车</button>
+                    </li>
+                );
+            }
+
+            return (
+                <div className="products">
+                    商品列表
+                    <ul>
+                        { lis }
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+    class Cart extends React.Component {
+
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                items: [
+                    {id: '111', name: '橘子', price: 10, pic: '🍊', count: 1},
+                    {id: '222', name: '哈密瓜', price: 10, pic: '🍈', count: 2},
+                ]
+            }
+        }
+
+        addItem(product) {
+
+            const item = this.state.items.find((item) => {
+                return item.id === product.id
+            });
+            // 如果item 有效 表示 找到对应的商品 增加 count 值
+            if (item) {
+                item.count++;
+            } else {
+                // 将新的商品添加到购物车
+                this.state.items.push({...product, count: 1});
+            }
+            // 修改数据模型, 重新 渲染
+            this.setState({
+                items: this.state.items
+            })
+        }
+
+        render() {
+
+            const { items } = this.state;
+
+            const lis =  items.map((item) => {
+                return <li key={item.id}> { item.name }, 价格: { item.price }, { item.pic }, 数量{item.count} </li>
+            });
+
+            return (
+                <div className="cart">
+                    购物车
+                    <ul>
+                        { lis }
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+    class Shop extends React.Component {
+
+        constructor(props) {
+            super(props)
+            // 提前传教一个 ref 对象
+            this.cartRef = React.createRef();
+
+        }
+
+        addToCart(product) {
+            console.log('shop ', product);
+            // .current 可以返回 具体的实例
+            const cart = this.cartRef.current;
+
+            cart.addItem(product);
+        }
+
+        render() {
+            return (
+                <div className="shop">
+                    商店
+                    <Products onAddToCart={ (product) => { this.addToCart(product) } } />
+                    <hr/>
+                    { /*  ref 用来引用 具体的 组件标签   */ }
+                    <Cart ref={this.cartRef} />
+                </div>
+            )
+        }
+    }
+    
+    ReactDOM.render(
+        <Shop/>, 
+        document.getElementById('app')
+    );
+
+</script>
+</body>
+</html>

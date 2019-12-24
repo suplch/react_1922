@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .products {
+            border: solid 5px red;
+        }
+
+        .cart {
+            border: solid 5px green;
+        }
+
+        .shop {
+            border: solid 5px pink;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    class Products extends React.Component {
+
+        constructor(props) {
+            super(props);
+        }
+
+        addToCart(product) {
+            console.log('Products:  ', product);
+
+            this.props.onAddToCart(product)
+
+        }
+
+        render() {
+            // 接受父组件传递过来的 商品数据
+            const { productlist } = this.props;
+
+            const lis = [];
+            for (let product of productlist) {
+                lis.push(
+                    <li key={product.id}>
+                     { product.name} , 价格: { product.price}, { product.pic } 
+                     <button onClick={ () => { this.addToCart(product) } }>添加到购物车</button>
+                    </li>
+                );
+            }
+
+            return (
+                <div className="products">
+                    商品列表
+                    <ul>
+                        { lis }
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+    class Cart extends React.Component {
+
+        constructor(props) {
+            super(props);
+        }
+
+        render() {
+            // 接受父组件传递过来的 购物车数据
+            const { items } = this.props;
+            const lis =  items.map((item) => {
+                return <li key={item.id}> { item.name }, 价格: { item.price }, { item.pic }, 数量{item.count} </li>
+            });
+
+            return (
+                <div className="cart">
+                    购物车
+                    <ul>
+                        { lis }
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+    class Shop extends React.Component {
+
+        constructor(props) {
+            super(props)
+            // 提前传教一个 ref 对象
+            this.cartRef = React.createRef();
+
+            this.state = {
+                product_list: [
+                    {id: '111', name: '橘子', price: 10, pic: '🍊'},
+                    {id: '222', name: '哈密瓜', price: 10, pic: '🍈'},
+                    {id: '333', name: '西瓜', price: 10, pic: '🍉'},
+                    {id: '444', name: '葡萄', price: 10, pic: '🍇'},
+                ],
+                items: [
+                    {id: '111', name: '橘子', price: 10, pic: '🍊', count: 1},
+                    {id: '222', name: '哈密瓜', price: 10, pic: '🍈', count: 2},
+                ]
+            }
+        }
+
+        addToCart(product) {
+            console.log('shop ', product);
+            
+            const { items } = this.state;
+
+            const item = items.find((item) => {
+                return item.id === product.id
+            });
+
+            if (item) {
+                item.count++
+            } else {
+                items.push({...product, count: 1})
+            }
+            // setState 实际是一个 对象合并的方法, 请自行理解一个合并的概念
+            // 重新渲染
+            this.setState({
+                items: items
+            })
+        }
+
+        render() {
+            const {product_list, items} = this.state;
+            return (
+                <div className="shop">
+                    商店
+                    <Products productlist={ product_list } onAddToCart={ (product) => { this.addToCart(product) } } />
+                    <hr/>
+                    { /*  ref 用来引用 具体的 组件标签   */ }
+                    <Cart items={ items } ref={this.cartRef} />
+                </div>
+            )
+        }
+    }
+    
+    ReactDOM.render(
+        <Shop/>, 
+        document.getElementById('app')
+    );
+
+</script>
+</body>
+</html>
