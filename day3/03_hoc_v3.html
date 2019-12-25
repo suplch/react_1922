@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .cpu {
+            border: solid 5px red;
+
+        }
+
+        .board {
+            border: solid 5px green;
+            
+        }
+
+        .keyboard {
+            border: solid 5px black;
+            
+        }
+
+        .mouse {
+            border: solid 5px pink;
+            
+        }
+
+        .computer {
+            border: solid 5px purple;
+            
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    function CPU(props) {
+        return (
+            <div className="cpu">
+                CPU: { props.brand }    
+            </div>
+        );
+    }
+
+    function Board(props) {
+        return (
+            <div className="board">
+                主板: { props.brand }
+            </div>
+        );
+    }
+
+    function KeyBoard(props) {
+        return (
+            <div className="keyboard">
+                键盘: { props.brand }
+            </div>
+        );
+    }
+
+    function Mouse(props) {
+        return (
+            <div className="mouse">
+                鼠标: { props.brand }
+            </div>
+        );
+    }
+
+    function makeComputer(brand, CPU, Mouse, Keyboard, Board) {
+        return function (props) {
+            return (
+                <div className="computer">
+                    { brand } 电脑
+                    <div>
+                        <CPU brand={ props.cpu_brand } />
+                        <Mouse brand={ props.mouse_brand } />
+                        <KeyBoard brand={ props.keyboard_brand } />
+                        <Board brand={ props.board_brand} />
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    const LianXiangComputer = makeComputer('联想', CPU, Mouse, KeyBoard, Board);
+    const XiaoMiComputer = makeComputer('小米', CPU, Mouse, KeyBoard, Board);
+
+    
+    ReactDOM.render(
+        <div>
+            <LianXiangComputer cpu_brand={'Inter'} mouse_brand={'罗技'} keyboard_brand={'杂牌'} board_brand={'华硕'} />
+            <hr/>
+            <XiaoMiComputer cpu_brand={'AMD'} mouse_brand={'双飞燕'} keyboard_brand={'雷蛇'} board_brand={'微星'} />
+        </div>,
+        document.getElementById('app')
+    );
+
+</script>
+</body>

@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    function Dialog(props) {
+        console.log(props);
+        return (
+            <div style={  {border: 'solid 5px red'}  }>
+                {/* style 样式 */}
+                <header>{props.title}</header>
+                <section>
+                    { props.content }
+                </section>
+                <footer>{props.foot}</footer>
+            </div>
+        )
+    }
+
+    function List(props) {
+        const fruits = props.fruits;
+
+        const lis = fruits.map((fruit) => {
+            return <li> {fruit.name} , { fruit.pic } </li>
+        });
+
+        return (
+            <ul>
+                { lis }
+            </ul>
+        )
+    }
+    
+    const fruits = [
+        {name: '橘子', pic: '🍊'},
+        {name: '哈密瓜', pic: '🍈'},
+        {name: '西瓜', pic: '🍉'}
+    ]
+
+    const fruit_list = <List fruits={ fruits } />
+
+    const foot = (
+        <div>
+            <button>确定</button>
+            <button>取消</button>
+        </div>
+    )
+
+    ReactDOM.render(
+        <div>
+            <Dialog title="消息对话框" foot={'状态栏'} content={'又有新的消息来了'} />
+            <hr/>
+            <Dialog title="消息对话框" foot={ foot } content={ fruit_list } />
+        </div>, 
+        document.getElementById('app')
+    );
+    
+</script>
+</body>
+</html>

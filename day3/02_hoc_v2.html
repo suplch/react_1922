@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .welcome {
+            border: solid 5px red;
+        }
+        .super {
+            border: solid 5px green;
+            box-shadow: 10px 10px 10px orange;
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    function Welcome(props) {
+        return (
+            <div className="welcome">
+                欢迎 {props.name} 光临 {props.place} 参观访问!!!    
+            </div>
+        )
+    }
+
+    function enhanceWelcome(Comp) {
+        return function (props) {
+            return (
+                <div className="super">
+                    #############<br/>
+                    <Comp name={ props.name } place={ props.place } />
+                    #############<br/>
+                </div>
+            );
+        }
+    }
+
+    const PowerWelcome = enhanceWelcome(Welcome)
+    const MorePowerWelcome = enhanceWelcome(PowerWelcome)
+
+    ReactDOM.render(
+        <div>
+            <Welcome name="奥巴马" place={'北京'} />
+            <hr/>
+            <PowerWelcome name="奥巴马" place={'广州'} />
+            <PowerWelcome name="叶利钦" place={'上海'} />
+            <PowerWelcome name="丘吉尔" place={'北科'} />
+            <hr/>
+
+            <MorePowerWelcome name="张三" place="北京" />
+        </div>,
+        document.getElementById('app')
+    );
+
+</script>
+</body>

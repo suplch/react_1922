@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    function Welcome(props) {
+        return (
+            <div>
+                欢迎 {props.name} 光临 {props.place} 参观访问!!!    
+            </div>
+        )
+    }
+
+    function createWelcomeWithName(name) {
+        return function (props) {
+            return (
+                <div>
+                    欢迎 {name} 光临 {props.place} 参观访问!!!    
+                </div>
+            );
+        }
+    }
+
+    function createWelcomeWithPlace(place) {
+        return function (props) {
+            return (
+                <div>
+                    欢迎 {props.name} 光临 {place} 参观访问!!!    
+                </div>
+            );
+        }
+    }
+
+    function createWelcome(name, place) {
+        return function (props) {
+            return (
+                <div>
+                    欢迎 {name} 光临 {place} 参观访问!!!    
+                </div>
+            );
+        }
+    }
+
+    const WelcomeAoBaMa = createWelcomeWithName('奥巴马');
+    const WelcomeToBeijing  = createWelcomeWithPlace('北京');
+    const WelcomeNamePlace = createWelcome('张三', '1922a');
+
+
+    ReactDOM.render(
+        <div>
+            <Welcome name={ '张三' } place={ '前锋1922' } />
+            <hr/>
+            <Welcome name={ '奥巴马' } place={ '北科' } />
+            <Welcome name={ '奥巴马' } place={ '中国' } />
+            <hr/>
+            <WelcomeAoBaMa place={'北京'} />
+            <WelcomeAoBaMa place={'天津'} />
+            <WelcomeAoBaMa place={'上海'} />
+            <hr/>
+            <WelcomeToBeijing name={'特朗普'} />
+            <WelcomeToBeijing name={'普京'} />
+            <WelcomeToBeijing name={'默克尔'} />
+            <hr/>
+            <WelcomeNamePlace />
+            
+        </div>, 
+        document.getElementById('app')
+    );
+    
+</script>
+</body>
+</html>
