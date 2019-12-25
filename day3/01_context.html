@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .grandpa {
+            border: solid 5px red;
+            width: 80%;
+            height: 500px;
+            margin: 20px;
+        }
+
+        .father {
+            border: solid 5px green;
+            width: 80%;
+            height: 300px;
+            margin: 20px;
+        }
+
+        .child {
+            border: solid 5px blue;
+            width: 80%;
+            height: 100px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    const MyContext = React.createContext('hello world');
+    const { Provider, Consumer } = MyContext;
+
+    class Grandpa extends React.Component {
+        constructor(props){
+            super(props);
+        }
+
+        render() {
+            console.log('Grandpa', this.context);
+            return (
+                <div className="grandpa">
+                    爷爷: { this.context.welcome } 
+                    <Consumer>
+                        { (value) => {
+
+                            return <input value={ value.welcome } />
+                        } }    
+                    </Consumer>
+                    <Father />
+                </div>
+            );
+        }
+    }
+    // 标识一下 当前 Grandpa 组件 可以接受到 MyContext 里面 的 Provider 提供数据
+    Grandpa.contextType = MyContext;
+
+    class Father extends React.Component {
+        constructor(props){
+            super(props);
+        }
+
+        render() {
+            console.log('Father', this.context);
+            return (
+                <div className="father">
+                    爸爸: { this.context.welcome } 
+                    <Consumer>
+                        { (value) => {
+
+                            return <input value={ value.welcome } />
+                        } }    
+                    </Consumer>
+                    <Child />
+                </div>
+            );
+        }
+    }
+
+    // 标识一下 当前 Father 组件 可以接受到 MyContext 里面 的 Provider 提供数据
+    Father.contextType = MyContext;
+
+    class Child extends React.Component {
+        constructor(props){
+            super(props);
+        }
+
+        render() {
+            console.log('Child', this.context);
+            return (
+                <div className="child">
+                    孩子: { this.context.welcome } 
+                    <Consumer>
+                        { (value) => {
+
+                            return <input value={ value.welcome } />
+                        } }    
+                    </Consumer>
+                </div>
+            );
+        }
+    }
+
+    // 标识一下 当前 Child 组件 可以接受到 MyContext 里面 的 Provider 提供数据
+    Child.contextType = MyContext;
+
+    class Box extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                business: {
+                    welcome: '世界你好',
+                    count: 0,
+                }
+            }
+        }
+
+        changeWelcome(event) {
+            this.setState({
+                business: {
+                    welcome: event.target.value
+                }
+            })
+        }
+
+        render() {
+            return (
+                <div>
+                    { this.state.business.welcome }
+                    { /* 受控组件  当表单组件 value 属性 绑定一个 state 状态数据 */}
+                    { /* 那么 表单完全由 state数据来控制, 这时我们必须提供一个 onChange 事件处理数据  */ }
+                    <input onChange={ (event) => { this.changeWelcome(event) }  } value={this.state.business.welcome} />
+                    <Provider value={ this.state.business }>
+                        <Grandpa />
+                    </Provider>
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <div>
+            <Box/>
+        </div>, 
+        document.getElementById('app')
+    );
+    
+</script>
+</body>
+</html>
