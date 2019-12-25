@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .box {
+            border: solid 5px red;
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    class Box extends React.Component {
+        constructor(props) {
+            super(props);
+            this.elRef = React.createRef();
+            this.ulRef = React.createRef();
+            // 方法一
+            this.setValue10 = this.setValue10.bind(this);
+            this.state = {
+                countObj: {
+                    value: 0
+                },
+                hobbies: [
+                    'java', 'code', 'css'
+                ],
+                time: new Date().toLocaleString()
+            }
+            console.log('box  构造函数被调用')
+        }
+
+        static getDerivedStateFromProps(nextProps, prevState) {
+            console.log('getDerivedStateFromProps', nextProps, prevState.countObj.value)
+            return prevState
+        }
+        addHobbies = () => {
+            this.setState({
+                hobbies: [...this.state.hobbies, 'c++', 'c#', 'node']
+            })
+        }
+        // 方法二
+        addCount = () => {
+            this.setState({
+                countObj: {
+                    value: this.state.countObj.value + 1
+                }
+            })
+        }
+
+        setValue10() {
+            this.setState({
+                countObj: {
+                    value: 10
+                }
+            })
+        }
+        // 此钩子函数 用来控制, 是否重新渲染 本组件
+        shouldComponentUpdate(nextProps, nextState) {
+            console.log('shouldComponentUpdate', '是否应该重新渲染')
+            console.log(nextProps, nextState);
+            
+            // if (nextState.countObj.value === this.state.countObj.value) {
+            //     return false;
+            // }
+            return true;
+        }
+
+        render() {
+
+            const lis = this.state.hobbies.map((hobby, index) => {
+                return <li key={index}>{ hobby }</li>
+            });
+
+            console.log('box  render 函数 被调用')
+            return (
+                <div ref={this.elRef} className="box">
+                    { this.state.countObj.value }
+                    <button onClick={ this.addCount }>增加</button>
+                    <button onClick={ this.setValue10 }>设置为10</button>
+                    <button onClick={ this.addHobbies }>增加 爱好</button>
+                    { this.state.time }
+                    <ul ref={this.ulRef}>
+                        {lis}
+                    </ul>
+                </div>
+            )
+        }
+        // 更新DOM前 给你一个机会获取 当前 dom 的快照
+        getSnapshotBeforeUpdate(prevProps, prevState) {
+            console.log('getSnapshotBeforeUpdate ', prevProps, prevState);
+            //alert(this.elRef.current.innerHTML)
+            return this.ulRef.current.offsetHeight
+        }
+
+        componentDidUpdate(prevProps, prevState, snapshot) {
+            console.log('componentDidUpdate', prevProps, prevState, snapshot)
+        }
+
+        componentDidMount() {
+            console.log('componentDidMount', '组件已经被挂载了')
+            this.tid = setInterval(() => {
+                let time = new Date().toLocaleString()
+                console.log(time)
+                this.setState({
+                    time
+                })
+            }, 1000)
+        }
+
+        componentWillUnmount() {
+            clearInterval(this.tid);
+            console.log('componentWillUnmount 组件销毁了')
+        }
+    }
+
+    class Table extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                show: true
+            }
+        }
+
+        toggle = () => {
+            this.setState({
+                show: !this.state.show
+            })
+        }
+
+        render() {
+
+            let box = null;
+            if (this.state.show) {
+               box = <Box />
+            }
+
+            return (
+                <div>
+                    <button onClick={ this.toggle }>切换</button>
+                    { box }
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <div>
+            <Table/>
+        </div>, 
+        document.getElementById('app')
+    );
+    
+</script>
+</body>
+</html>
