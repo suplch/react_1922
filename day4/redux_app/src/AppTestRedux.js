@@ -8,7 +8,23 @@ class AppTestRedux extends Component {
     }
 
     render() {
-        const {count, multiple, inc, dec, mul, div} = this.props;
+        const {
+            count, multiple, goods_list, cart_items, inc, dec, mul, div, addToCart
+        } = this.props;
+
+        const lis = goods_list.map((goods) => {
+            return (
+                <li key={goods.id}>
+                    { goods.name }, {goods.price}, {goods.pic }
+                    <button onClick={ () => { addToCart(goods) } }>添加都购物车</button>    
+                </li>
+            )
+        });
+
+        const cartli = cart_items.map((item) => {
+        return <li key={item.id}>{ item.name }, {item.price}, {item.pic }, {item.count}</li>
+        })
+
         return (
             <div>
                 { count},
@@ -20,6 +36,17 @@ class AppTestRedux extends Component {
                  <button onClick={ mul }>乘10</button>
                  <button onClick={ div }>除10</button>
                 测试 redux app
+                <hr/>
+                商品列表
+                <input /> <button>添加商品</button>
+                <ul>
+                    { lis } 
+                </ul>
+
+                购物车
+                <ul>
+                    { cartli }
+                </ul>
             </div>
         )
     }
@@ -28,7 +55,9 @@ class AppTestRedux extends Component {
 function mapStateToProps(state) {
     return {
         count: state.counter,
-        multiple: state.multiple
+        multiple: state.multiple,
+        goods_list: state.goods,
+        cart_items: state.cart
     }
 }
 // 将 dispatch 调用 映射为 props 函数类型的属性
@@ -45,6 +74,9 @@ function mapDispatchToProps(dispatch) {
         },
         div() {
             dispatch( {type: 'Div'} )
+        },
+        addToCart(goods) {
+            dispatch( {type: 'ADD_TO_CART', payload: { goods } } )
         }
     }
 }
