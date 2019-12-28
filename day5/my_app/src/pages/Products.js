@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import axios from 'axios';
@@ -13,7 +13,12 @@ class Products extends Component {
         const { product_list, load_products, loadMore } = this.props;
 
         const lis = product_list.map((product, index) => {
-          return <li key={index}>{product.name}, {product.pic}</li>
+          return (
+            <li key={product.id}>
+                {product.name}, {product.pic}
+                <Link to={ '/product_detail/' + product.id }>详情</Link>
+            </li>
+          )
         })
         return (
             <div className="page">

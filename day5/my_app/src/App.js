@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Home from './pages/Home';
 import About from './pages/About';
 import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
 
 class App extends Component {
 
@@ -25,7 +26,7 @@ class App extends Component {
             <Route path="/home" exact component={Home} />
             <Route path="/about" exact component={About} />
             <Route path="/products" exact component={Products} />
-            
+            <Route path="/product_detail/:pid" exact component={ProductDetail} />
           </Switch>
         </BrowserRouter>
       </div>
@@ -42,7 +43,17 @@ export default App
 
     let comp = null;
     if (location.pathname === props.path) {
-      comp = <Comp />
+      //   location.pathname
+      //    /product_detail/:pid
+      //    /product_detail/222
+      let props = {
+        history: {.........},
+        location: {......},
+        match: {
+          params: { pid: }
+        }
+      }
+      comp = <Comp {...props} />
     }
 
     return (

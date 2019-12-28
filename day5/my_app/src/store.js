@@ -11,7 +11,8 @@ if (stateStr) {
 }
 
 const Goods_Products = {
-    product_list
+    product_list,
+    product_detail: {}
 }
 
 function productsReducer(state = Goods_Products, action) {
@@ -31,6 +32,14 @@ function productsReducer(state = Goods_Products, action) {
                 ]
                 return newState;
             }
+        case 'SET_DETAIL': 
+            // V1
+            // let newState = {...state};
+            // newState.product_detail = action.payload.product_detail;
+            // return newState;
+
+            // V2
+            return {...state, product_detail: action.payload.product_detail};
         default:
             return state;
     }
@@ -40,6 +49,7 @@ function productsReducer(state = Goods_Products, action) {
 
 const store = createStore(
     productsReducer,
+    // 用来处理 异步数据
     applyMiddleware(thunk)
 );
 
