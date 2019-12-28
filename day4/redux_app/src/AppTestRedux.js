@@ -106,6 +106,4 @@ export default wrapFn(AppTestRedux)
             }
         }
     }
-
-
 */
