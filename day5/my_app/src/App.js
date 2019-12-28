@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Link, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import axios from 'axios';
-
-import './App.css';
+import Home from './pages/Home';
+import About from './pages/About';
+import Products from './pages/Products';
 
 class App extends Component {
 
@@ -12,61 +13,51 @@ class App extends Component {
   }
 
   render() {
-    const { product_list, load_products, loadMore } = this.props;
-
-    const lis = product_list.map((product, index) => {
-      return <li key={index}>{product.name}, {product.pic}</li>
-    })
-
     return (
       <div>
-        <button onClick={ load_products }>加载 产品数据</button>
-        <ul>
-          { lis }
-        </ul>
-        <button onClick={ loadMore }>加载更多</button>
+        <BrowserRouter>
+          <Redirect from="/" to="/home"/>
+          <Link to={ '/home' }>首页</Link>
+          <Link to={ '/about' }>关于</Link>
+          <Link to={ '/products' }>产品列表</Link>
+
+          <Switch>
+            <Route path="/home" exact component={Home} />
+            <Route path="/about" exact component={About} />
+            <Route path="/products" exact component={Products} />
+            
+          </Switch>
+        </BrowserRouter>
       </div>
     )
   }
 }
 
-function mapState2Props(state) {
-  return {
-    product_list: state.product_list
-  }
-}
+export default App
 
-function mapDispatch2Props(dispatch) {
-  return {
-    load_products() {
-      // dispatch({ type: ''})
-      dispatch(async function(dispatch, getState) {
-        const result = await axios.get('/product_list');
-        dispatch({
-           type: 'LOAD_PRODUCTS', 
-           payload: {
-             product_list: result.data.product_list
-            }
-          }
-        )
-      })
-    },
-    loadMore() {
-      dispatch(async function(dispatch, getState) {
-        const result = await axios.get('/more_products');
-        dispatch({
-          type: 'LOAD_MORE_PRODUCT',
-          payload: {
-            product_list: result.data.product_list
-          }
-        })
-      });
+/*
+  <></>  代表 react 里面的空标签 相当于 vue 里面的 template
+  function Route(props) {
+    const Comp = props.component;
+
+    let comp = null;
+    if (location.pathname === props.path) {
+      comp = <Comp />
     }
+
+    return (
+      <>
+        { comp }
+      </>
+    )
   }
-}
 
-export default connect(mapState2Props, mapDispatch2Props)(App)
-
+  function Link(props) {
+    return (
+      <a href={ props.to }>{ props.children }</a>
+    )
+  }
+*/
 
 
 /*

@@ -4,7 +4,10 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 
-import './index.css';
+import './css/App.css';
+import './css/index.css';
+import './css/page.css';
+
 import App from './App';
 // import axios from 'axios';
 

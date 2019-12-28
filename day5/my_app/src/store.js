@@ -1,11 +1,17 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
+const stateStr = sessionStorage.getItem('state')
+
+let product_list = [];
+
+if (stateStr) {
+    const state = JSON.parse(stateStr);
+    product_list = state.product_list;
+}
+
 const Goods_Products = {
-    product_list: [
-        // {name: '草莓', pic: '🍓'},
-        // {name: '橙子', pic: '🍊'},
-    ]
+    product_list
 }
 
 function productsReducer(state = Goods_Products, action) {
@@ -36,5 +42,12 @@ const store = createStore(
     productsReducer,
     applyMiddleware(thunk)
 );
+
+store.subscribe(function() {
+    console.log(store.getState())
+    const state = store.getState();
+    
+    sessionStorage.setItem('state', JSON.stringify(state))
+});
 
 export default store;
