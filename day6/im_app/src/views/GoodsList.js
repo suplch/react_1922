@@ -21,10 +21,15 @@ class GoodsList extends React.Component {
 
     render() {
         console.log(this.props);
-        const { goods_list, addFruit } = this.props;
+        const { goods_list, addFruit, addToCart } = this.props;
 
         const lis = goods_list.map((goods) => {
-            return <li key={goods.get('id')}>{ goods.get('name')}, {goods.get('pic')}</li>
+            return (
+                <li key={goods.get('id')}>
+                    { goods.get('name')}, {goods.get('pic')}
+                    <button onClick={ () => { addToCart(goods) }}>添加到购物车</button>
+                </li>
+            )
         });
         return (
             <div style={  {border: 'solid 5px red'}   }>
@@ -56,6 +61,14 @@ function mapDispatchToProps(dispatch) {
                     fruit
                 }
             } )
+        },
+        addToCart(fruit) {
+            dispatch({
+                type: 'ADD_CART',
+                payload: {
+                    fruit
+                }
+            })
         }
     }
 }
