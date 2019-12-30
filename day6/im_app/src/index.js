@@ -1,9 +1,19 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import './index.css';
-// import App from './App';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import store from './store/index';
 
-// ReactDOM.render(<App />, document.getElementById('root'));
+import './index.css';
+import App from './App';
+
+ReactDOM.render(
+    <Provider store={store}>
+        <App/>
+    </Provider>,
+    document.getElementById('root')
+);
+
+/*
 
 import { fromJS } from 'immutable';
 // 是一个immutable 提供的 函数, 用来将 原始的 javascript 对象 转换为 immutable 不可变对象
@@ -121,3 +131,5 @@ const oldRoot = fromJS({
 const newRoot = oldRoot.set('tea', 14);
 console.log(oldRoot.get('tea'));
 console.log(newRoot.get('tea'));
+
+*/
