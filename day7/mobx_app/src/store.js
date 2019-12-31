@@ -5,7 +5,13 @@ const store = observable({
         {id: '111', name: '西瓜', pic: '🍉'},
         {id: '222', name: '草莓', pic: '🍓'},
         {id: '333', name: '葡萄', pic: '🍇'},
-    ]
+    ],
+    cart: {
+        items: [
+            {id: '111', name: '西瓜', pic: '🍉', count: 1},
+            {id: '222', name: '草莓', pic: '🍓', count: 2},
+        ]
+    }
 })
 let id = 1000
 
@@ -19,6 +25,24 @@ store.delGoods = function(goods_id) {
     })
     this.goods_list.splice(goodsIndex, 1);
 
+}.bind(store)
+
+store.addGoodsToCart = function(goods) {
+
+    const item = this.cart.items.find((item) => {
+        return item.id === goods.id
+    })
+
+    if (item) {
+        item.count++;
+    } else {
+        this.cart.items.push({
+            ...goods,
+            count: 1
+        })
+    }
+
+    
 }.bind(store)
 // data.addGoods = function(goods) {
 //     goods.id = id++;

@@ -11,6 +11,28 @@ const NewApp = observer(App)
 ReactDOM.render(<NewApp store={store} />, document.getElementById('root'));
 
 
+/*
+    // 参考 伪代码
+    function observer(CompFn) {
+        return class extends React.Component {
+            constructor(props) {
+                super(props)
+                autorun(() => {
+                    this.forceUpdate()
+                })
+            }
+            render() {
+                return (
+                    <div>
+                        <CompFn {...props} />
+                    </div>
+                )
+            }
+        }
+    }
+*/
+
+
 
 /*  ------------------------------------------
 import { decorate, observable, autorun, computed } from 'mobx';
