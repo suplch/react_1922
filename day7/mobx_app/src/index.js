@@ -1,15 +1,15 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import './index.css';
-// import App from './App';
-// import * as serviceWorker from './serviceWorker';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { observer } from 'mobx-react'
+import './index.css';
+import App from './App';
 
-// ReactDOM.render(<App />, document.getElementById('root'));
+import store from './store';
 
-// // If you want your app to work offline and load faster, you can change
-// // unregister() to register() below. Note this comes with some pitfalls.
-// // Learn more about service workers: https://bit.ly/CRA-PWA
-// serviceWorker.unregister();
+const NewApp = observer(App)
+
+ReactDOM.render(<NewApp store={store} />, document.getElementById('root'));
+
 
 
 /*  ------------------------------------------
@@ -137,6 +137,7 @@ setTimeout(function() {
     aPerson.state = '饿了'
 }, 3000)
 */
+/*
 const { observable,  reaction } =  require('mobx');
 
 const todos = observable([
@@ -164,3 +165,4 @@ reaction(
 todos.push({ title: "吃饭", done: false });
 
 todos.push({ title: "学习 前端", done: false });
+*/

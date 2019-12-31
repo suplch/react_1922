@@ -1,24 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+function App(props) {
+  const nameRef = React.createRef();
+  const picRef = React.createRef();
+
+  const { goods_list, timer, addGoods, delGoods } = props.store;
+  const lis  = goods_list.map((goods) => {
+    return (
+      <li key={goods.id}>
+        { goods.name }, { goods.pic }
+        <button onClick={ () => { removeGoods(goods) } }>删除</button>  
+      </li>
+    )
+  });
+
+  function removeGoods(goods) {
+    delGoods(goods.id);
+  }
+
+  function commitGoods() {
+    const name = nameRef.current.value;
+    const pic = picRef.current.value;
+
+    addGoods({
+      name, pic
+    })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      { timer }
+      <ul>
+        { lis }
+      </ul>
+
+      <input ref={nameRef} />
+      <input ref={picRef} />
+      <button onClick={ commitGoods }>添加</button>
+
     </div>
   );
 }
