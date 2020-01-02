@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom'
 
 import Vue from 'vue';
 
+import { sum } from './calu';
+
 import VueApp from './VueApp.vue';
 
 import { App } from './App';
 alert('hello hahahahah');
+alert(sum(1, 100));
 ReactDOM.render(
     <div>
         <App />
