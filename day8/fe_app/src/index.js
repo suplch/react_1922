@@ -1,19 +1,50 @@
-import { add, sub, sum } from './calu';
-import './style';
-import logo from  './logo';
-alert(logo)
-console.log('Hello world', add(2, 4))
+import React from 'react';
+import ReactDOM from 'react-dom'
 
-console.log('bye', sub(5, 2))
+import Vue from 'vue';
 
-console.log(sum(1, 100))
+import VueApp from './VueApp.vue';
 
-const div = document.createElement("div");
+import { App } from './App';
+alert('hello hahahahah');
+ReactDOM.render(
+    <div>
+        <App />
+    </div>,
+    document.getElementById('react-app')
+);
 
-div.className = "box";
-div.innerHTML = "Hello";
+ReactDOM.render(
+    <div>
+        <App />
+    </div>,
+    document.getElementById('react-app222')
+);
 
-document.body.appendChild(div);
-const img = document.createElement('img');
-img.src = logo;
-document.body.appendChild(img)
+
+new Vue({
+    render: h => h(VueApp),
+  }).$mount('#vue-app')
+  
+
+
+
+// import { add, sub, sum } from './calu';
+// import './style';
+// import logo from  './logo';
+// alert(logo)
+// console.log('Hello world', add(2, 4))
+
+// console.log('bye', sub(5, 2))
+
+// console.log(sum(1, 100))
+
+// const div = document.createElement("div");
+
+// div.className = "box";
+// div.innerHTML = "Hello";
+
+// document.body.appendChild(div);
+// const img = document.createElement('img');
+// img.src = logo;
+// document.body.appendChild(img)

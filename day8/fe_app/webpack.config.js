@@ -1,6 +1,7 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
 const dist = path.join(__dirname, 'dist');
 
@@ -12,11 +13,24 @@ module.exports = {
         path: dist,
         filename: 'main.[hash].js'
     },
+    devtool: 'inline-source-map',
+   devServer: {
+     contentBase: './dist'
+   },
     resolve: {
         extensions:['.js', '.png', '.css']
     },
     module: {
         rules: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            { 
+                test: /\.js$/, 
+                use: 'babel-loader', 
+                exclude: /node_modules/ 
+            },
             {
                 test: /\.css$/g,
                 use: ['style-loader', 'css-loader']
@@ -29,6 +43,7 @@ module.exports = {
     },
 
     plugins: [
+        new VueLoaderPlugin(),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             path: dist,
