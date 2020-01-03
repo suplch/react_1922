@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookie from 'js-cookie';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { ArticleAnalyse, RecentPublish } from './dashboard/index';
@@ -6,6 +7,13 @@ import { ArticleAnalyse, RecentPublish } from './dashboard/index';
 import Frame from './Frame';
 
 export class Admin extends React.Component {
+
+    componentDidMount() {
+        const token = Cookie.get('token');
+        if (!token) {
+            window.location.hash = '#/login'
+        }
+    }
 
     render() {
         

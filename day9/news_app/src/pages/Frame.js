@@ -1,6 +1,7 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
+import Cookie from 'js-cookie';
 
 import { menus, findItemByPath } from './menus';
 
@@ -13,6 +14,11 @@ class Frame extends React.Component {
         super(props);
         console.log(props);
         console.log(this.props.location.pathname)
+    }
+
+    logout = () => {
+        Cookie.remove('token', { path: '/' });
+        window.location.hash = '#/login'
     }
 
     menuClick = (subItem) => {
@@ -51,17 +57,8 @@ class Frame extends React.Component {
         return (
             <Layout style={ {height: '100%'} }>
                 <Header className="header">
-                <div className="logo" />
-                <Menu
-                    onClick={ this.menuClick }
-                    theme="dark"
-                    mode="horizontal"
-                    style={{ lineHeight: '64px' }}
-                >
-                    <Menu.Item key="1">nav 1</Menu.Item>
-                    <Menu.Item key="2">nav 2</Menu.Item>
-                    <Menu.Item key="3">nav 3</Menu.Item>
-                </Menu>
+                    <div className="logo" />
+                    <Button onClick={this.logout}>登出</Button>
                 </Header>
                 <Layout>
                 <Sider width={200} style={{ background: '#fff' }}>
