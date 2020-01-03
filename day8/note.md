@@ -51,7 +51,6 @@ module.exports = {
 };
 
 ```
-
 ### Webpack 打包 处理 React JSX 语法
 - 安装 babel 模块 
 ```
@@ -84,7 +83,6 @@ module: { //要打包的第三方模块
 
 ### Webpack 打包 处理 vue 文件
 
-
 - .vue 文件 有三部分组成 template, script, style
 ```vue
 <template>
@@ -99,8 +97,6 @@ module: { //要打包的第三方模块
   .css{}
 </style>
 ```
-
-
 
 - vue-loader
 ```
@@ -149,11 +145,7 @@ module.exports = {
     ]
 }
 
-            
-
 ```
-
-
 
 ### 混合开发
 - Hybrid 开发介绍与意义
