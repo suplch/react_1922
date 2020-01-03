@@ -1,15 +1,30 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { withRouter } from 'react-router-dom';
 
-import { menus } from './menus';
+import { menus, findItemByPath } from './menus';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-export class Frame extends React.Component {
+class Frame extends React.Component {
 
+    constructor(props) {
+        super(props);
+        console.log(props);
+        console.log(this.props.location.pathname)
+    }
+
+    menuClick = (subItem) => {
+
+        
+        this.props.history.push(subItem.path);
+    }
 
     render() {
+        const { menuId, itemId } = findItemByPath(this.props.location.pathname)
+        console.log(this.props.location.pathname);
+        console.log(menuId, itemId)
         const subMenuEls = menus.map((menuItem) => {
             return (
                 <SubMenu
@@ -24,7 +39,9 @@ export class Frame extends React.Component {
                     {
                         menuItem.subItems.map((subItem) => {
                             return (
-                            <Menu.Item key={subItem.id}>{ subItem.text}</Menu.Item>
+                                <Menu.Item onClick={ () => this.menuClick(subItem) } key={subItem.id}>
+                                    { subItem.text}
+                                </Menu.Item>
                             )
                         })
                     }
@@ -32,13 +49,13 @@ export class Frame extends React.Component {
             )
         });
         return (
-            <Layout>
+            <Layout style={ {height: '100%'} }>
                 <Header className="header">
                 <div className="logo" />
                 <Menu
+                    onClick={ this.menuClick }
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={['2']}
                     style={{ lineHeight: '64px' }}
                 >
                     <Menu.Item key="1">nav 1</Menu.Item>
@@ -50,8 +67,8 @@ export class Frame extends React.Component {
                 <Sider width={200} style={{ background: '#fff' }}>
                     <Menu
                     mode="inline"
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
+                    defaultOpenKeys={[ menuId ]}
+                    defaultSelectedKeys={[ itemId ]}
                     style={{ height: '100%', borderRight: 0 }}
                     >
                         { subMenuEls }
@@ -71,6 +88,7 @@ export class Frame extends React.Component {
                         minHeight: 280,
                     }}
                     >
+                        {/* 相当于 vue slot */}
                     { this.props.children }
                     </Content>
                 </Layout>
@@ -79,3 +97,5 @@ export class Frame extends React.Component {
         )
     }
 }
+
+export default withRouter(Frame)

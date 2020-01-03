@@ -3,8 +3,8 @@ export const menus = [
         id: 'ybp',
         text: '仪表盘',
         subItems: [
-            { id: 'wzlgfx', text: '文章浏览量分析' },
-            { id: 'zjfb', text: '最近发布' },
+            { id: 'wzlgfx', text: '文章浏览量分析', path: '/admin/analyse' },
+            { id: 'zjfb', text: '最近发布', path: '/admin/recent' },
         ]
     }, 
     {
@@ -24,3 +24,22 @@ export const menus = [
         ]
     }
 ]
+
+export function findItemByPath(path) {
+    for (let menu of menus) {
+        for (let menuItem of menu.subItems) {
+            if (menuItem.path === path) {
+                return {
+                    menuId: menu.id,
+                    itemId: menuItem.id
+                }
+            }
+        }
+    }
+    return null;
+}
+
+// export const mapPath = {
+//     '/admin/analyse': menus[0].subItems[0],
+//     '/admin/recent': menus[0].subItems[1],
+// }
