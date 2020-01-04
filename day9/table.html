@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <script>
+        
+            function createTable(columns, dataRecords) {
+                const table = document.createElement('table');
+                table.border = 1;
+
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+
+                table.appendChild(thead);
+
+                const thead_tr = document.createElement('tr');
+
+                for (let col of columns) {
+                    const th = document.createElement('th');
+                    th.innerText = col.title;
+                    thead_tr.appendChild(th);
+                }
+                thead.appendChild(thead_tr);
+
+                table.appendChild(tbody);
+
+                for (let record of dataRecords) {
+                    let tr = document.createElement('tr');
+
+                    for (let col of columns) {
+                        let td = document.createElement('td');
+
+                        if (typeof col.render === 'function') {
+                            td.innerHTML = col.render(record)
+                        } else {
+                            td.innerText = record[col.key];
+                        }
+                        
+
+                        tr.appendChild(td);
+                    }
+                    tbody.appendChild(tr);
+                }
+                
+
+
+                return table;
+            }
+
+            let columns = [
+                {
+                    title: '姓名',
+                    key: 'name'
+                },
+                {
+                    title: '年龄',
+                    key: 'age',
+                    render(record) {
+                        if (record.age >= 18) {
+                            return `<span style="color: green">${record.age}</span>`
+                        }else {
+                            return `<span style="color: red">${record.age}</span>`
+                        }
+                        
+                    }
+                }, {
+                    title: '操作',
+                    render(record) {
+                        return `<button onclick="del(${record.id})">删除</button>`
+                    }
+                }
+            ];
+
+            let dataRecords = [
+                {name: '张三', age: 17},
+                {name: '李四', age: 28},
+                {name: '王五', age: 38},
+            ]
+
+            let tb = createTable(columns, dataRecords);
+        
+
+            document.body.appendChild(tb);
+
+        </script>
+
+
+    </body>
+</html>

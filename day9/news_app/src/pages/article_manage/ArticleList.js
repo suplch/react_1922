@@ -1,9 +1,12 @@
 import React from 'react';
-import { Table, Button, Modal } from 'antd';
+import { Table, Button, Modal, Input, Layout, Row, Col } from 'antd';
 import axios from 'axios';
 
-const ButtonGroup = Button.Group;
+import { EditDialog } from './EditDialog';
 
+const { Header, Content } = Layout;
+const ButtonGroup = Button.Group;
+const { TextArea } = Input;
 
 export class ArticleList extends React.Component {
 
@@ -39,7 +42,7 @@ export class ArticleList extends React.Component {
                 return (
                     <ButtonGroup>
                         <Button size='small' onClick={ () => { this.showArticle(record)} }>查看</Button>
-                        <Button size='small' type='primary'>编辑</Button>
+                        <Button size='small' onClick={ () => { this.editArticle(record) } } type='primary'>编辑</Button>
                         <Button size='small' type='danger'>删除</Button>
                     </ButtonGroup>
                 )
@@ -49,10 +52,34 @@ export class ArticleList extends React.Component {
 
     showArticle = (record) => {
         console.log(record)
-        this.setState({
-            currentArticle: record,
-            modalVisible: true
+        // this.setState({
+        //     currentArticle: record,
+        //     modalVisible: true
+        // })
+
+        Modal.info({
+            title: record.title,
+            content: (
+                <div style={ {border: 'solid 5px red', width: '100%', height: '300px', overflow: 'auto'} }>
+                    {record.content}
+                </div>
+            )
         })
+    }
+
+    editArticle(record) {
+        const dialog = Modal.confirm({
+            title: '修改数据',
+            width: 800,
+            content: (
+                <EditDialog onSaveOk={ () => { dialog.destroy() } } artile={record} />
+            ),
+            onOk() {
+
+            }
+        });
+
+        
     }
 
     getArtile_List = async (pageno, pagesize) => {
@@ -105,16 +132,16 @@ export class ArticleList extends React.Component {
                     columns={columns} 
                     dataSource={dataSource}  />
 
-                    <Modal visible={modalVisible} onOk={this.closeModal} onCancel={this.closeModal}>
+                    {/* <Modal visible={modalVisible} onOk={this.closeModal} onCancel={this.closeModal}>
                         <p>{currentArticle && currentArticle.title}</p>
                         <div style={ {width: '100%', height: '300px', overflow: 'auto'} }>
                             <p>{currentArticle && currentArticle.content}</p>
                         </div>
                         
                         <p>{currentArticle && currentArticle.author}</p>
-                    </Modal>
+                    </Modal> */}
 
-                    
+
             </div>
         )
     }

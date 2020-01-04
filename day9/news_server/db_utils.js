@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Schema.Types.ObjectId;
+// const ObjectId = mongoose.Schema.Types.ObjectId;
+const ObjectId = mongoose.Types.ObjectId;
 mongoose.connect('mongodb://localhost/article',  { useUnifiedTopology: true, useNewUrlParser: true });
 
 const ArticleSchema = mongoose.Schema({
@@ -27,9 +28,18 @@ async function listArticle(pageno, pagesize) {
     }
 }
 
+async function saveArtivle(articleObj) {
+    let retObj = await Article.findOne({_id: ObjectId(articleObj._id)}).exec();
+    retObj.title = articleObj.title;
+    retObj.content = articleObj.content;
+    retObj.author = articleObj.author;
+    return await retObj.save()
+}
+
 module.exports = {
     createArticle,
-    listArticle
+    listArticle,
+    saveArtivle
 }
 
 

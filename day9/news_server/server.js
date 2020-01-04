@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken');
 
-const { createArticle, listArticle } = require('./db_utils');
+const { createArticle, listArticle, saveArtivle } = require('./db_utils');
 
 
 const app = express();
@@ -98,6 +98,17 @@ app.get('/article/list', async function(request, response) {
         })
     }, 2000);
     
+})
+
+app.post('/article/edit', async function(req, res) {
+    const {_id, title, content, author } = req.body;
+
+    let ret = await saveArtivle({_id, title, content, author })
+
+    res.send({
+        code: 100,
+        data: ret
+    })
 })
 
 
