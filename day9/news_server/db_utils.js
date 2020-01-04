@@ -15,8 +15,16 @@ async function createArticle(articleObj) {
     return await Article.create(articleObj)
 }
 
-async function listArticle() {
-    return await Article.find().exec()
+async function listArticle(pageno, pagesize) {
+    pageno = Number(pageno) - 1;
+    pagesize = Number(pagesize);
+    let skip = pageno * pagesize;
+    let count = await Article.find().count();
+    console.log(count);
+    return {
+        total: count,
+        list: await Article.find().skip(skip).limit(pagesize).exec()
+    }
 }
 
 module.exports = {

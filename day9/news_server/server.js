@@ -87,12 +87,17 @@ app.post('/article/create', async function(request, response) {
 })
 
 app.get('/article/list', async function(request, response) {
+    const {pageno, pagesize} = request.query;
 
-    const artile_list = await listArticle()
-    response.send({
-        code: 100,
-        data: artile_list
-    })
+
+    const artile_ret = await listArticle(pageno, pagesize)
+    setTimeout(function() {
+        response.send({
+            code: 100,
+            data: artile_ret
+        })
+    }, 2000);
+    
 })
 
 
