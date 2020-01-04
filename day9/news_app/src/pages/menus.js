@@ -11,8 +11,8 @@ export const menus = [
         id: 'wzgl',
         text: '文章管理',
         subItems: [
-            { id:'cjwz', text: '创建文章' },
-            { id:'wzcx', text: '文章查询' },
+            { id:'cjwz', text: '创建文章', path: '/admin/create_article'},
+            { id:'wzcx', text: '文章查询', path: '/admin/search' },
         ]
     },
     {

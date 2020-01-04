@@ -26,6 +26,22 @@ console.log(originData);
   const cookieParser = require('cookie-parser');
   app.use(cookieParser())
 ```
+### mongoose
+```
+const mongoose = require('mongoose');
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
+mongoose.connect('mongodb://localhost/news',  { useUnifiedTopology: true, useNewUrlParser: true });
 
+const NewsSchema = mongoose.Schema({
+    title: String,  // 新闻标题
+    author: Number,   // 作者
+    content: Number, // 内容,
+    visitRate: Number, // 访问量
+    createdTime: Number // 发布时间
+});
+
+const News = mongoose.model('News', NewsSchema);
+
+```

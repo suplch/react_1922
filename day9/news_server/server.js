@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken');
 
+const { createArticle, listArticle } = require('./db_utils');
+
+
 const app = express();
 
 // body json 中间件
@@ -70,7 +73,27 @@ app.post('/auth/login', function(request, response) {
 
 })
 
+app.post('/article/create', async function(request, response) {
+    const { title, content, author } = request.body;
+    console.log({ title, content, author })
 
+    const article_ret = await createArticle({ title, content, author })
+
+    response.send({
+        code: 100,
+        msg: '发布成功',
+        data: article_ret
+    })
+})
+
+app.get('/article/list', async function(request, response) {
+
+    const artile_list = await listArticle()
+    response.send({
+        code: 100,
+        data: artile_list
+    })
+})
 
 
 const port = 5000;
