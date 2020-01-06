@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+    <body>
+        <script>
+            function showhtml() {
+                const editor = document.getElementById('editor');
+                console.log(editor.innerHTML);
+            }
+
+            function bold() {
+                document.execCommand('bold')
+            }
+
+        </script>
+        <textarea></textarea>
+        <button onclick="showhtml()">显示内容</button>
+        <button onclick="bold()">加粗</button>
+        <button onclick="document.execCommand('backColor', false, 'red')">背景色 红色</button>
+        <div id="editor" contenteditable style="border: solid 5px red">
+            hello
+        </div>
+        <hr/>
+
+        <div id="bianji">
+
+        </div>
+        
+        <script src="http://unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+        <script>
+            var E = window.wangEditor
+            var editor2 = new E('#bianji')
+            editor2.create()
+        </script>
+        <button onclick="alert(editor2.txt.html())">获取内容</button>
+    </body>
+</html>

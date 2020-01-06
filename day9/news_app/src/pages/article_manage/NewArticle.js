@@ -2,9 +2,19 @@ import React from 'react';
 import axios from 'axios';
 import { Form, Icon, Input, Button } from 'antd';
 
+import wangEditor from 'wangeditor';
+
 const { TextArea } = Input;
 
 class NewArticle extends React.Component {
+    constructor(props) {
+        super(props)
+        this.editor = React.createRef();
+
+        this.state = {
+            content: '实例文本'
+        }
+    }
 
     handleSubmit = (event) => {
         alert('开始提交');
@@ -13,7 +23,8 @@ class NewArticle extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 let result = await axios.post('/article/create', {
-                    ...values
+                    ...values,
+                    content: this.state.content
                 });
 
                 console.log(result.data);
@@ -22,6 +33,22 @@ class NewArticle extends React.Component {
                 }
             }
         });
+    }
+
+    componentDidMount() {
+        var E = wangEditor
+        var editor2 = new E(this.editor.current)
+        
+
+        editor2.customConfig.onchange = (html) => {
+            console.log(html);
+            this.setState({
+                content: editor2.txt.html()
+            })
+        }
+        editor2.create();
+        
+        editor2.txt.html(this.state.content);
     }
 
     render() {
@@ -41,13 +68,11 @@ class NewArticle extends React.Component {
                         )
                     }
                     </Form.Item>
+
                     <Form.Item>
-                    {getFieldDecorator('content', {
-                        rules: [{ required: true, message: '请输入文章内容!' }],
-                    })(
-                        <TextArea rows={4} />
-                    )}
+                        <div ref={this.editor}></div>
                     </Form.Item>
+
                     <Form.Item>
                     {getFieldDecorator('author', {
                         rules: [{ required: true, message: '请输入作者名称' }],

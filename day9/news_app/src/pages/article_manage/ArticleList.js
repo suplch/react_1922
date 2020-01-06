@@ -60,9 +60,7 @@ export class ArticleList extends React.Component {
         Modal.info({
             title: record.title,
             content: (
-                <div style={ {border: 'solid 5px red', width: '100%', height: '300px', overflow: 'auto'} }>
-                    {record.content}
-                </div>
+                <div dangerouslySetInnerHTML={ { __html: record.content } } style={ {border: 'solid 5px red', width: '100%', height: '300px', overflow: 'auto'} } />
             )
         })
     }
