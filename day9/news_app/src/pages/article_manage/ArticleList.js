@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Table, Button, Modal, Input, Layout, Row, Col } from 'antd';
 import axios from 'axios';
 
@@ -8,7 +9,7 @@ const { Header, Content } = Layout;
 const ButtonGroup = Button.Group;
 const { TextArea } = Input;
 
-export class ArticleList extends React.Component {
+class ArticleList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -16,7 +17,6 @@ export class ArticleList extends React.Component {
         this.state = {
             loading: false,
             columns: this.columns,
-            total: 0,
             modalVisible: false,
             currentArticle: null
         }
@@ -80,25 +80,6 @@ export class ArticleList extends React.Component {
         
     }
 
-    getArtile_List = async (pageno, pagesize) => {
-        this.setState({loading: true})
-        const result = await axios.get('/article/list', {
-            params: {
-                pageno: pageno,
-                pagesize: pagesize
-            }
-        })
-        this.setState({loading: false})
-        const artile_list = result.data.data.list;
-        const total = result.data.data.total;
-
-        console.log(artile_list);
-        this.setState({
-            dataSource: artile_list,
-            total
-        })
-    }
-
     closeModal = () => {
         this.setState({
             modalVisible: false
@@ -106,11 +87,21 @@ export class ArticleList extends React.Component {
     }
 
     async componentDidMount() {
-        await this.getArtile_List(1, 2)
+        const { load_article } = this.props;
+        this.setState({
+            loading: true
+        })
+        await load_article(1, 2);
+        this.setState({
+            loading: false
+        })
     }
 
     render() {
-        const {columns, dataSource, loading, total, modalVisible, currentArticle } = this.state;
+        const {columns, loading } = this.state;
+        console.log(this.props);
+        const { article_list, load_article, total } = this.props;
+
         return (
             <div>
                 网站列表
@@ -122,13 +113,19 @@ export class ArticleList extends React.Component {
                             pageSize: 2, 
                             onChange: async (page, pageSize) => {
                                 console.log(page, pageSize);
-                                await this.getArtile_List(page, pageSize)
+                                this.setState({
+                                    loading: true
+                                })
+                                await load_article(page, pageSize)
+                                this.setState({
+                                    loading: false
+                                })
                             }
                         } 
                     }
                     loading={loading}
                     columns={columns} 
-                    dataSource={dataSource}  />
+                    dataSource={ article_list }  />
 
                     {/* <Modal visible={modalVisible} onOk={this.closeModal} onCancel={this.closeModal}>
                         <p>{currentArticle && currentArticle.title}</p>
@@ -144,3 +141,39 @@ export class ArticleList extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    console.log('state-----', state)
+    return {
+        article_list: state.article.dataSource,
+        total: state.article.total
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        load_article(pageno, pagesize) {
+            return dispatch(async function(dispatch) {
+
+                const result = await axios.get('/article/list', {
+                    params: {
+                        pageno: pageno,
+                        pagesize: pagesize
+                    }
+                })
+                console.log(result.data)
+                const article_list = result.data.data.list;
+                const total = result.data.data.total;
+                dispatch({ 
+                    type: 'SET_DATASOURCE', 
+                    payload: {
+                        article_list,
+                        total
+                    } 
+                })
+            })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleList)
